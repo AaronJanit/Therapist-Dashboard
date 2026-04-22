@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinical Notes — CareSpace</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="script.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="brand"><i class="fas fa-heart"></i> CareSpace</div>
+            <ul class="nav-links">
+                <li><a href="dashboard.html" class="nav-link"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="clients.html" class="nav-link"><i class="fas fa-users"></i> Clients</a></li>
+                <li><a href="schedule.html" class="nav-link"><i class="fas fa-calendar-alt"></i> Schedule</a></li>
+                <li><a href="notes.html" class="nav-link active"><i class="fas fa-clipboard-list"></i> Clinical Notes</a></li>
+                <li><a href="invoices.html" class="nav-link"><i class="fas fa-file-invoice-dollar"></i> Invoices <span class="nav-tag">In progress</span></a></li>
+                <li id="admin-link" style="display: none;"><a href="admin.html" class="nav-link"><i class="fas fa-cogs"></i> Admin</a></li>
+            </ul>
+            <div class="user-area sidebar-user-area">
+                <div class="avatar" id="user-avatar">DR</div>
+                <div class="user-info">
+                    <h4 id="user-name">Dr. Sarah</h4>
+                    <p id="user-role">Clinical Psychologist</p>
+                </div>
+                <button id="logout-btn" class="logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </aside>
+        <div class="content-shell">
+            <nav class="top-nav">
+                <div class="top-nav-brand"><a href="https://manchesterholisticcentres.co.uk/" target="_blank"><img src="Whole Person Manchester Holistic centres.png" alt="CBT Therapy Manchester logo"></a></div>
+                <ul class="nav-links">
+                    <li><a href="https://manchesterholisticcentres.co.uk/" target="_blank" class="nav-link"><i class="fas fa-book"></i> Book a Room↗</a></li>
+                    <li><a href="#" onclick="openModal('contact-modal'); return false;" class="nav-link"><i class="fas fa-envelope"></i> Contact</a></li>
+                </ul>
+            </nav>
+            <main class="main-area" id="notes-app-main">
+                <div class="header">
+                    <div class="section-title">
+                        <h2>Clinical Notes</h2>
+                        <p>Select a client, review their timeline, and create or edit notes in the editor.</p>
+                    </div>
+                    <a href="dashboard.html" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Dashboard</a>
+                </div>
+
+                <div class="notes-page-layout">
+                    <aside class="notes-client-panel">
+                        <h3 class="notes-panel-title">Clients</h3>
+                        <div class="notes-panel-search">
+                            <div class="search-wrap">
+                                <label class="visually-hidden" for="notes-search-input">Search clients and notes</label>
+                                <span class="search-icon" aria-hidden="true"><i class="fas fa-search"></i></span>
+                                <input type="search" id="notes-search-input" class="search-input" placeholder="Filter clients and notes…" autocomplete="off">
+                            </div>
+                        </div>
+                        <ul class="notes-client-list" id="notes-client-list"></ul>
+                    </aside>
+
+                    <div class="notes-page-main">
+                        <div class="notes-editor-panel">
+                            <div class="notes-editor-header">
+                                <h3 class="notes-panel-title" id="notes-editor-client-label">Note</h3>
+                                <div class="notes-editor-actions">
+                                    <button type="button" class="btn btn-outline btn-sm" id="notes-btn-new" onclick="newNotesPageNote()">New note</button>
+                                    <button type="button" class="btn btn-secondary btn-sm" id="notes-btn-download" onclick="downloadNotesZip()"><i class="fas fa-file-archive"></i> Download all</button>
+                                    <button type="button" class="btn btn-primary btn-sm" id="notes-btn-save" onclick="saveNotesPageNote()">Save</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="note-editor-date">Session date</label>
+                                <input type="date" class="form-control" id="note-editor-date">
+                            </div>
+                            <div class="rte-wrap">
+                                <div class="rte-toolbar" role="toolbar" aria-label="Formatting">
+                                    <button type="button" class="rte-btn" onclick="rteCommand('bold')" title="Bold"><i class="fas fa-bold"></i></button>
+                                    <button type="button" class="rte-btn" onclick="rteCommand('italic')" title="Italic"><i class="fas fa-italic"></i></button>
+                                    <button type="button" class="rte-btn" onclick="rteCommand('underline')" title="Underline"><i class="fas fa-underline"></i></button>
+                                    <span class="rte-toolbar-sep"></span>
+                                    <button type="button" class="rte-btn" onclick="rteCommand('insertUnorderedList')" title="Bullet list"><i class="fas fa-list-ul"></i></button>
+                                    <button type="button" class="rte-btn" onclick="rteCommand('insertOrderedList')" title="Numbered list"><i class="fas fa-list-ol"></i></button>
+                                    <span class="rte-toolbar-sep"></span>
+                                    <button type="button" class="rte-btn" onclick="rteCommand('removeFormat')" title="Clear formatting"><i class="fas fa-eraser"></i></button>
+                                    <button type="button" class="rte-btn" id="notes-btn-dictate" onclick="toggleDictation()" title="Dictate note"><i class="fas fa-microphone"></i></button>
+                                </div>
+                                <div class="dictate-status" id="dictate-status" aria-live="polite"></div>
+                                <div id="note-editor-body" class="rte-editor form-control" contenteditable="true" data-placeholder="Write your session note (SOAP, observations, plan…)"></div>
+                            </div>
+                        </div>
+
+                        <div class="notes-timeline-panel">
+                            <h3 class="notes-panel-title">Timeline</h3>
+                            <p class="notes-timeline-hint" id="notes-timeline-hint">Choose a client to see their notes.</p>
+                            <div class="notes-timeline" id="notes-timeline"></div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- MODAL: CONTACT INFO -->
+    <div id="contact-modal" class="modal-overlay">
+        <div class="modal">
+            <h2><i class="fas fa-envelope-open-text" style="color:var(--secondary)"></i> Contact Information</h2>
+            <div class="contact-info">
+                <p>Need help booking a room or have a question? Reach out to Manchester Holistic Centres for support.</p>
+                <p><strong>Phone:</strong> +44 161 123 4567</p>
+                <br>
+                <p><strong>Email:</strong> <a href="mailto:info@manchesterholisticcentres.co.uk">info@manchesterholisticcentres.co.uk</a></p>
+                <br>
+                <p><strong>Website:</strong> <a href="https://manchesterholisticcentres.co.uk/" target="_blank">manchesterholisticcentres.co.uk↗</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeModals()">Close</button>
+                <a href="https://prestwichholisticcentre.co.uk/contact/" target="_blank" class="btn btn-primary">Visit Contact Page</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

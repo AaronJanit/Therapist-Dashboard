@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareSpace - Invoice Email Builder</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
+    <script src="script.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body onload="initInvoicesPage()">
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="brand"><i class="fas fa-heart"></i> CareSpace</div>
+            <ul class="nav-links">
+                <li><a href="dashboard.html" class="nav-link"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="clients.html" class="nav-link"><i class="fas fa-users"></i> Clients</a></li>
+                <li><a href="schedule.html" class="nav-link"><i class="fas fa-calendar-alt"></i> Schedule</a></li>
+                <li><a href="notes.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Clinical Notes</a></li>
+                <li><a href="invoices.html" class="nav-link active"><i class="fas fa-file-invoice-dollar"></i> Invoices <span class="nav-tag">In progress</span></a></li>
+                <li id="admin-link" style="display: none;"><a href="admin.html" class="nav-link"><i class="fas fa-cogs"></i> Admin</a></li>
+            </ul>
+            <div class="user-area sidebar-user-area">
+                <div class="avatar" id="user-avatar">DR</div>
+                <div class="user-info">
+                    <h4 id="user-name">Dr. Therapist</h4>
+                    <p id="user-role">Therapist</p>
+                </div>
+                <button id="logout-btn" class="logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </aside>
+        <div class="content-shell">
+            <nav class="top-nav">
+                <div class="top-nav-brand"><a href="https://manchesterholisticcentres.co.uk/" target="_blank"><img src="Whole Person Manchester Holistic centres.png" alt="CBT Therapy Manchester logo"></a></div>
+                <ul class="nav-links">
+                    <li><a href="https://manchesterholisticcentres.co.uk/" target="_blank" class="nav-link"><i class="fas fa-book"></i> Book a Room↗</a></li>
+                    <li><a href="#" onclick="openModal('contact-modal'); return false;" class="nav-link"><i class="fas fa-envelope"></i> Contact</a></li>
+                </ul>
+            </nav>
+            <main class="main-area">
+                <div class="page-section active">
+                    <div class="header">
+                        <div class="section-title">
+                            <h2>Invoice Email Builder</h2>
+                            <p>Create a copy-paste invoice email based on the selected client and payment preferences.</p>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" type="button" onclick="copyInvoiceToClipboard()"><i class="fas fa-copy"></i> Copy Email</button>
+                            <button class="btn btn-outline" type="button" onclick="updateInvoicePreview()"><i class="fas fa-sync-alt"></i> Refresh Preview</button>
+                        </div>
+                    </div>
+
+                    <div class="invoice-page-grid">
+                        <section class="invoice-panel">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="invoice-client">Client</label>
+                                    <select id="invoice-client" class="form-control" onchange="updateInvoicePreview()">
+                                        <option value="">Loading clients…</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="invoice-date">Invoice send date</label>
+                                    <input type="date" id="invoice-date" class="form-control" onchange="updateInvoicePreview()">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="invoice-due-days">Payment due in (days)</label>
+                                    <input type="number" id="invoice-due-days" class="form-control" value="14" min="1" onchange="updateInvoicePreview()">
+                                </div>
+                                <div class="form-group">
+                                    <label for="invoice-service">Service description</label>
+                                    <input type="text" id="invoice-service" class="form-control" value="Therapy session" onchange="updateInvoicePreview()">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="invoice-quantity">Quantity</label>
+                                    <input type="number" id="invoice-quantity" class="form-control" value="1" min="1" onchange="updateInvoicePreview()">
+                                </div>
+                                <div class="form-group">
+                                    <label for="invoice-rate">Rate per session (£)</label>
+                                    <input type="number" id="invoice-rate" class="form-control" value="75" min="0" step="0.01" onchange="updateInvoicePreview()">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Invoice layout</label>
+                                <div class="layout-options">
+                                    <label><input type="radio" name="invoice-layout" id="layout-standard" value="standard" checked onchange="updateInvoicePreview()"> Standard</label>
+                                    <label><input type="radio" name="invoice-layout" value="friendly" onchange="updateInvoicePreview()"> Friendly</label>
+                                    <label><input type="radio" name="invoice-layout" value="formal" onchange="updateInvoicePreview()"> Formal</label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Payment options</label>
+                                <div id="invoice-payments" class="payment-options">
+                                    <label><input type="checkbox" value="bank" data-label="Bank transfer to sort code 20-00-00, account 12345678" onchange="updateInvoicePreview()"> Bank transfer</label>
+                                    <label><input type="checkbox" value="card" data-label="Card payment accepted by phone or in person" onchange="updateInvoicePreview()"> Card</label>
+                                    <label><input type="checkbox" value="cash" data-label="Cash accepted in person at your next appointment" onchange="updateInvoicePreview()"> Cash</label>
+                                    <label><input type="checkbox" value="paypal" data-label="PayPal payment available at paypal.me/YourPractice" onchange="updateInvoicePreview()"> PayPal</label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Saved payment settings</label>
+                                <div class="payment-settings-wrap">
+                                    <div class="settings-grid">
+                                        <div class="form-group">
+                                            <label for="payment-bank-name">Bank name</label>
+                                            <input type="text" id="payment-bank-name" class="form-control" placeholder="e.g. CareSpace Therapy" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="payment-bank-account-name">Account holder</label>
+                                            <input type="text" id="payment-bank-account-name" class="form-control" placeholder="e.g. CareSpace Therapy" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="payment-bank-sort-code">Sort code</label>
+                                            <input type="text" id="payment-bank-sort-code" class="form-control" placeholder="20-00-00" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="payment-bank-account-number">Account number</label>
+                                            <input type="text" id="payment-bank-account-number" class="form-control" placeholder="12345678" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="payment-paypal-url">PayPal / payment link</label>
+                                        <input type="text" id="payment-paypal-url" class="form-control" placeholder="paypal.me/YourPractice" />
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="payment-default-text">Default payment text</label>
+                                        <textarea id="payment-default-text" class="form-control" rows="3" placeholder="Default payment instructions" ></textarea>
+                                    </div>
+
+                                    <div class="settings-actions">
+                                        <button type="button" class="btn btn-primary" id="save-payment-settings">Save payment settings</button>
+                                        <span id="payment-settings-status" class="copy-status">Saved payment settings will auto-fill here.</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="invoice-notes">Extra notes</label>
+                                <textarea id="invoice-notes" class="form-control" rows="4" placeholder="Optional message or reminder" onchange="updateInvoicePreview()"></textarea>
+                            </div>
+                        </section>
+
+                        <section class="invoice-panel invoice-preview-panel">
+                            <div class="preview-header">
+                                <div>
+                                    <h3>Email preview</h3>
+                                    <p style="margin: 6px 0 0; color: #6b7280; font-size: 13px;">Copy a ready-to-send invoice message.</p>
+                                </div>
+                                <span id="copy-status" class="copy-status">Preview is ready.</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="invoice-subject">Email subject</label>
+                                <input type="text" id="invoice-subject" class="form-control" readonly>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="invoice-preview">Email body</label>
+                                <textarea id="invoice-preview" class="email-preview-box" rows="18" spellcheck="true" placeholder="Your invoice preview will appear here once a client is selected."></textarea>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- MODAL: CONTACT INFO -->
+    <div id="contact-modal" class="modal-overlay">
+        <div class="modal">
+            <h2><i class="fas fa-envelope-open-text" style="color:var(--secondary)"></i> Contact Information</h2>
+            <div class="contact-info">
+                <p>Need help booking a room or have a question? Reach out to Manchester Holistic Centres for support.</p>
+                <p><strong>Phone:</strong> +44 161 123 4567</p>
+                <br>
+                <p><strong>Email:</strong> <a href="mailto:info@manchesterholisticcentres.co.uk">info@manchesterholisticcentres.co.uk</a></p>
+                <br>
+                <p><strong>Website:</strong> <a href="https://manchesterholisticcentres.co.uk/" target="_blank">manchesterholisticcentres.co.uk↗</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeModals()">Close</button>
+                <a href="https://prestwichholisticcentre.co.uk/contact/" target="_blank" class="btn btn-primary">Visit Contact Page</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareSpace - Clinical Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
+    <script src="script.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+</head>
+<body>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="brand"><i class="fas fa-heart"></i> CareSpace</div>
+            <ul class="nav-links">
+                <li><a href="dashboard.html" class="nav-link active"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="clients.html" class="nav-link"><i class="fas fa-users"></i> Clients</a></li>
+                <li><a href="schedule.html" class="nav-link"><i class="fas fa-calendar-alt"></i> Schedule</a></li>
+                <li><a href="notes.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Clinical Notes</a></li>
+                <li><a href="invoices.html" class="nav-link"><i class="fas fa-file-invoice-dollar"></i> Invoices <span class="nav-tag">In progress</span></a></li>
+                <li id="admin-link" style="display: none;"><a href="admin.html" class="nav-link"><i class="fas fa-cogs"></i> Admin</a></li>
+            </ul>
+            <div class="user-area sidebar-user-area">
+                <div class="avatar" id="user-avatar">DR</div>
+                <div class="user-info">
+                    <h4 id="user-name">Dr. Therapist</h4>
+                    <p id="user-role">Therapist</p>
+                </div>
+                <button id="logout-btn" class="logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </aside>
+        <div class="content-shell">
+            <nav class="top-nav">
+                <div class="top-nav-brand"><a href="https://manchesterholisticcentres.co.uk/" target="_blank"><img src="Whole Person Manchester Holistic centres.png" alt="CBT Therapy Manchester logo"></a></div>
+                <ul class="nav-links">
+                    <li><a href="https://manchesterholisticcentres.co.uk/" target="_blank" class="nav-link"><i class="fas fa-book"></i> Book a Room↗</a></li>
+                    <li><a href="#" onclick="openModal('contact-modal'); return false;" class="nav-link"><i class="fas fa-envelope"></i> Contact</a></li>
+                </ul>
+            </nav>
+
+            <!-- MAIN CONTENT -->
+            <main class="main-area">
+        <!-- DASHBOARD PAGE -->
+        <div id="dashboard" class="page-section active">
+            <div class="header">
+                <div class="section-title">
+                    <h2>Dashboard</h2>
+                    <p>Welcome back! Here is your overview.</p>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-outline" onclick="openModal('client-modal')">Add Client</button>
+                    <button class="btn btn-primary" onclick="openModal('note-modal')"><i class="fas fa-plus"></i> Log Note</button>
+                </div>
+            </div>
+
+            <div class="page-toolbar dashboard-search-row">
+                <div class="search-wrap">
+                    <label class="visually-hidden" for="dashboard-search-input">Search dashboard</label>
+                    <span class="search-icon" aria-hidden="true"><i class="fas fa-search"></i></span>
+                    <input type="search" id="dashboard-search-input" class="search-input" placeholder="Search clients, today’s sessions, notes…" autocomplete="off">
+                </div>
+            </div>
+            <div id="dashboard-search-panel" class="search-panel hidden" aria-live="polite"></div>
+
+            <!-- Next Session -->
+            <div class="next-session-card" id="next-session-card">
+                <div class="next-session-label">Next Session</div>
+                <div class="next-session-client" id="next-session-client">No upcoming sessions</div>
+                <div class="next-session-countdown" id="next-session-countdown"></div>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-info"><h3 id="stat-active-clients">0</h3><p>Active Clients</p></div>
+                    <div class="stat-icon bg-blue"><i class="fas fa-user-check"></i></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info"><h3 id="stat-sessions-today">0</h3><p>Sessions Today</p></div>
+                    <div class="stat-icon bg-green"><i class="fas fa-clock"></i></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info"><h3 id="stat-unwritten-notes">0</h3><p>Notes Pending</p></div>
+                    <div class="stat-icon bg-orange"><i class="fas fa-file-alt"></i></div>
+                </div>
+            </div>
+
+            <!-- Content Split -->
+            <div class="dashboard-content">
+                <!-- Calendar -->
+                <div class="calendar-box">
+                    <div class="cal-header">
+                        <span id="cal-header-text" style="font-weight: 700; font-size: 18px;">October 2023</span>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-outline" style="padding: 5px 10px;" onclick="changeMonth(-1)"><i class="fas fa-chevron-left"></i></button>
+                            <button class="btn btn-outline" style="padding: 5px 10px;" onclick="changeMonth(1)"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                    <div class="cal-grid" id="calendar-container">
+                        <!-- JS will populate this -->
+                    </div>
+                </div>
+
+                <!-- Today's Schedule -->
+                <div class="schedule-list">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                        <h3 style="font-size: 18px; color: var(--dark);">Today's Agenda</h3>
+                        <button type="button" class="btn btn-text" onclick="goToScheduleTab()" style="font-size: 12px; padding: 5px;">View Full Schedule &rarr;</button>
+                    </div>
+                    <div id="dashboard-today-list">
+                        <div class="empty-box" style="padding: 30px; border: none; background: #f5f5f5;">
+                            <i class="fas fa-sort-numeric-down" style="font-size: 24px; color: #ccc; display: block; margin-bottom: 10px;"></i>
+                            No schedule set for today.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD CLIENT -->
+    <div id="client-modal" class="modal-overlay">
+        <div class="modal modal-wide">
+            <h2 id="client-modal-title"><i class="fas fa-user-plus" style="color:var(--primary)"></i> Add New Client</h2>
+            <form id="client-form" onsubmit="handleAddClient(event)">
+                <div class="form-row">
+                    <div class="form-group"><label for="c_name">Full Name</label><input type="text" class="form-control" id="c_name" placeholder="e.g. John Doe" required></div>
+                    <div class="form-group"><label for="c_dob">Date of birth</label><input type="date" class="form-control" id="c_dob"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label for="c_email">Email</label><input type="email" class="form-control" id="c_email" placeholder="john@example.com" required></div>
+                    <div class="form-group"><label for="c_phone">Phone</label><input type="tel" class="form-control" id="c_phone" placeholder="(555) 000-0000"></div>
+                </div>
+                <div class="form-group"><label for="c_emergency">Emergency contact</label><input type="text" class="form-control" id="c_emergency" placeholder="Name — phone"></div>
+                <div class="form-group"><label for="c_issue">Primary issue</label>
+                    <select class="form-control" id="c_issue">
+                        <option>Anxiety</option>
+                        <option>Depression</option>
+                        <option>Stress Management</option>
+                        <option>Couples Counseling</option>
+                        <option>Trauma (PTSD)</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div class="form-group" id="client-status-group" hidden>
+                    <label for="c_status">Status</label>
+                    <select class="form-control" id="c_status">
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="closeModals()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="client-form-submit">Save Client</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD NOTE -->
+    <div id="note-modal" class="modal-overlay">
+        <div class="modal">
+            <h2><i class="fas fa-clipboard-list" style="color:var(--secondary)"></i> Log Session Note</h2>
+            <form id="note-form" onsubmit="handleAddNote(event)">
+                <div class="form-group"><label>Client</label>
+                    <select class="form-control" id="n_client_id" required></select>
+                </div>
+                <div class="form-group"><label>Date</label><input type="date" class="form-control" id="n_date" required></div>
+                <div class="form-group"><label>Notes</label><textarea class="form-control" id="n_content" rows="5" placeholder="Subjective, Objective, Assessment, Plan (SOAP)..."></textarea></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="closeModals()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Note</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: CONTACT INFO -->
+    <div id="contact-modal" class="modal-overlay">
+        <div class="modal">
+            <h2><i class="fas fa-envelope-open-text" style="color:var(--secondary)"></i> Contact Information</h2>
+            <div class="contact-info">
+                <p>Need help booking a room or have a question? Reach out to Manchester Holistic Centres for support.</p>
+                <p><strong>Phone:</strong> +44 161 123 4567</p>
+                <br>
+                <p><strong>Email:</strong> <a href="mailto:info@manchesterholisticcentres.co.uk">info@manchesterholisticcentres.co.uk</a></p>
+                <br>
+                <p><strong>Website:</strong> <a href="https://manchesterholisticcentres.co.uk/" target="_blank">manchesterholisticcentres.co.uk↗</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeModals()">Close</button>
+                <a href="https://prestwichholisticcentre.co.uk/contact/" target="_blank" class="btn btn-primary">Visit Contact Page</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareSpace - Schedule</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
+    <script src="script.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="brand"><i class="fas fa-heart"></i> CareSpace</div>
+            <ul class="nav-links">
+                <li><a href="dashboard.html" class="nav-link"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="clients.html" class="nav-link"><i class="fas fa-users"></i> Clients</a></li>
+                <li><a href="schedule.html" class="nav-link active"><i class="fas fa-calendar-alt"></i> Schedule</a></li>
+                <li><a href="notes.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Clinical Notes</a></li>
+                <li><a href="invoices.html" class="nav-link"><i class="fas fa-file-invoice-dollar"></i> Invoices <span class="nav-tag">In progress</span></a></li>
+                <li id="admin-link" style="display: none;"><a href="admin.html" class="nav-link"><i class="fas fa-cogs"></i> Admin</a></li>
+            </ul>
+            <div class="user-area sidebar-user-area">
+                <div class="avatar" id="user-avatar">DR</div>
+                <div class="user-info">
+                    <h4 id="user-name">Dr. Therapist</h4>
+                    <p id="user-role">Therapist</p>
+                </div>
+                <button id="logout-btn" class="logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </aside>
+        <div class="content-shell">
+            <nav class="top-nav">
+                <div class="top-nav-brand"><a href="https://manchesterholisticcentres.co.uk/" target="_blank"><img src="Whole Person Manchester Holistic centres.png" alt="CBT Therapy Manchester logo"></a></div>
+                <ul class="nav-links">
+                    <li><a href="https://manchesterholisticcentres.co.uk/" target="_blank" class="nav-link"><i class="fas fa-book"></i> Book a Room↗</a></li>
+                    <li><a href="#" onclick="openModal('contact-modal'); return false;" class="nav-link"><i class="fas fa-envelope"></i> Contact</a></li>
+                </ul>
+            </nav>
+
+            <!-- MAIN CONTENT -->
+            <main class="main-area">
+        <!-- SCHEDULE PAGE -->
+        <div id="schedule" class="page-section active">
+            <div class="header">
+                <div class="section-title">
+                    <h2>Schedule</h2>
+                    <p>Week view — pick a day and hour to book, or use Book New Session.</p>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="openModal('session-modal')"><i class="fas fa-calendar-plus"></i> Book New Session</button>
+            </div>
+            <div class="schedule-calendar-card">
+                <div class="schedule-toolbar">
+                    <div class="schedule-toolbar-main">
+                        <div id="schedule-week-range" class="schedule-week-range" aria-live="polite"></div>
+                        <div class="schedule-view-controls">
+                            <label class="schedule-toggle">
+                                <span class="schedule-toggle-text">Night shift</span>
+                                <span class="schedule-switch">
+                                    <input id="toggle-night-shift" type="checkbox" onchange="handleScheduleViewToggle('nightShift', this.checked)">
+                                    <span class="schedule-slider"></span>
+                                </span>
+                            </label>
+                            <label class="schedule-toggle">
+                                <span class="schedule-toggle-text">Show full day</span>
+                                <span class="schedule-switch">
+                                    <input id="toggle-full-day" type="checkbox" onchange="handleScheduleViewToggle('fullDay', this.checked)">
+                                    <span class="schedule-slider"></span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="schedule-toolbar-actions">
+                        <button type="button" class="btn btn-outline btn-sm" onclick="changeScheduleWeek(-1)" title="Previous week" aria-label="Previous week"><i class="fas fa-chevron-left"></i></button>
+                        <button type="button" class="btn btn-outline btn-sm" onclick="changeScheduleWeek(0)">This week</button>
+                        <button type="button" class="btn btn-outline btn-sm" onclick="changeScheduleWeek(1)" title="Next week" aria-label="Next week"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+                <div class="schedule-week-scroller">
+                    <div id="schedule-grid" class="schedule-week-grid" role="grid" aria-label="Weekly appointment calendar"></div>
+                </div>
+            </div>
+        </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- MODAL: BOOK SESSION -->
+    <div id="session-modal" class="modal-overlay">
+        <div class="modal">
+            <h2><i class="fas fa-calendar-check" style="color:var(--accent)"></i> Book Appointment</h2>
+            <form id="session-form" onsubmit="handleAddSession(event)">
+                <div class="form-group"><label>Date</label><input type="date" class="form-control" id="s_date" required></div>
+                <div class="form-group"><label>Time</label>
+                    <select class="form-control" id="s_time" required>
+                        <option value="09:00">9:00 AM</option>
+                        <option value="10:00">10:00 AM</option>
+                        <option value="11:00">11:00 AM</option>
+                        <option value="12:00">12:00 PM</option>
+                        <option value="01:00">1:00 PM</option>
+                        <option value="02:00">2:00 PM</option>
+                        <option value="03:00">3:00 PM</option>
+                        <option value="04:00">4:00 PM</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Client</label>
+                    <select class="form-control" id="s_client_id" required></select>
+                </div>
+                <div class="form-group" id="session-status-group" hidden>
+                    <label for="s_status">Status</label>
+                    <select class="form-control" id="s_status">
+                        <option value="confirmed">Confirmed</option>
+                        <option value="pending">Pending</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="closeModals()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Book Session</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+     <!-- MODAL: CONTACT INFO -->
+    <div id="contact-modal" class="modal-overlay">
+        <div class="modal">
+            <h2><i class="fas fa-envelope-open-text" style="color:var(--secondary)"></i> Contact Information</h2>
+            <div class="contact-info">
+                <p>Need help booking a room or have a question? Reach out to Manchester Holistic Centres for support.</p>
+                <p><strong>Phone:</strong> +44 161 123 4567</p>
+                <br>
+                <p><strong>Email:</strong> <a href="mailto:info@manchesterholisticcentres.co.uk">info@manchesterholisticcentres.co.uk</a></p>
+                <br>
+                <p><strong>Website:</strong> <a href="https://manchesterholisticcentres.co.uk/" target="_blank">manchesterholisticcentres.co.uk↗</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeModals()">Close</button>
+                <a href="https://prestwichholisticcentre.co.uk/contact/" target="_blank" class="btn btn-primary">Visit Contact Page</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
