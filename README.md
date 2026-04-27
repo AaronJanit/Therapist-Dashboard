@@ -1,4 +1,5 @@
 # Therapist Dashboard (CareSpace)
+## Visit at https://aaronjanit.github.io/Therapist-Dashboard/
 
 A lightweight, browser-based therapist workflow app for managing clients, sessions, notes, and invoice emails.
 
