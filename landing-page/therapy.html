@@ -1,0 +1,2208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serenity Holistic Therapy Centre</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --lavender: #C3B1E1;
+            --lavender-light: #E8DFF5;
+            --lavender-deep: #9B8EC4;
+            --mint: #A8E6CF;
+            --mint-light: #D4F1E4;
+            --mint-deep: #7BC8A4;
+            --blush: #FFD1DC;
+            --blush-light: #FFE8ED;
+            --blush-deep: #FFA0B5;
+            --cream: #FFF8F0;
+            --cream-dark: #F5EDE3;
+            --sage: #B5C9A3;
+            --sage-light: #D4E4C6;
+            --text-dark: #4A4A5A;
+            --text-medium: #6B6B7B;
+            --text-light: #8A8A9A;
+            --white: #FFFFFF;
+            --shadow-soft: 0 4px 30px rgba(0, 0, 0, 0.06);
+            --shadow-medium: 0 8px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--cream);
+            color: var(--text-dark);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* ===== FLOAT ANIMATION ===== */
+        .float-up {
+            opacity: 0;
+            transform: translateY(80px);
+            transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+                        transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .float-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .float-up.delay-1 { transition-delay: 0.15s; }
+        .float-up.delay-2 { transition-delay: 0.3s; }
+        .float-up.delay-3 { transition-delay: 0.45s; }
+        .float-up.delay-4 { transition-delay: 0.6s; }
+        .float-up.delay-5 { transition-delay: 0.75s; }
+
+        /* ===== NAVIGATION ===== */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.2rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.5s ease;
+            background: rgba(255, 248, 240, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        nav.scrolled {
+            background: rgba(255, 248, 240, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 2px 30px rgba(0, 0, 0, 0.05);
+            padding: 0.8rem 3rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            position: relative;
+        }
+
+        .logo-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .logo-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            letter-spacing: 0.02em;
+        }
+
+        .logo-text span {
+            color: var(--lavender-deep);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-medium);
+            font-size: 0.92rem;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            position: relative;
+            transition: color 0.3s ease;
+            padding: 0.3rem 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1.5px;
+            background: linear-gradient(90deg, var(--lavender-deep), var(--mint-deep));
+            transition: width 0.3s ease;
+            border-radius: 1px;
+        }
+
+        .nav-links a:hover {
+            color: var(--lavender-deep);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--lavender), var(--lavender-deep));
+            color: var(--white) !important;
+            padding: 0.6rem 1.6rem !important;
+            border-radius: 50px;
+            text-transform: uppercase !important;
+            font-size: 0.85rem !important;
+            letter-spacing: 0.06em !important;
+            transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+        }
+
+        .nav-cta::after {
+            display: none !important;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(155, 142, 196, 0.35);
+            color: var(--white) !important;
+        }
+
+        /* Mobile Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 5px;
+            z-index: 1001;
+        }
+
+        .hamburger span {
+            width: 28px;
+            height: 2px;
+            background: var(--text-dark);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(170deg, var(--cream) 0%, var(--lavender-light) 40%, var(--mint-light) 70%, var(--blush-light) 100%);
+        }
+
+        .hero-bg-shapes {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .hero-shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.4;
+            animation: floatShape 20s ease-in-out infinite;
+        }
+
+        .hero-shape:nth-child(1) {
+            width: 500px;
+            height: 500px;
+            background: var(--lavender);
+            top: -10%;
+            right: -5%;
+            animation-delay: 0s;
+        }
+
+        .hero-shape:nth-child(2) {
+            width: 400px;
+            height: 400px;
+            background: var(--mint);
+            bottom: -5%;
+            left: -5%;
+            animation-delay: -7s;
+        }
+
+        .hero-shape:nth-child(3) {
+            width: 350px;
+            height: 350px;
+            background: var(--blush);
+            top: 40%;
+            left: 50%;
+            animation-delay: -14s;
+        }
+
+        .hero-shape:nth-child(4) {
+            width: 250px;
+            height: 250px;
+            background: var(--sage);
+            top: 20%;
+            left: 10%;
+            animation-delay: -3s;
+            opacity: 0.25;
+        }
+
+        @keyframes floatShape {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -40px) scale(1.05); }
+            50% { transform: translate(-20px, 20px) scale(0.95); }
+            75% { transform: translate(15px, 30px) scale(1.02); }
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            padding: 2rem;
+            max-width: 850px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--lavender-deep);
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(195, 177, 225, 0.3);
+        }
+
+        .hero-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--mint-deep);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.3); }
+        }
+
+        .hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.8rem, 6vw, 5rem);
+            font-weight: 300;
+            line-height: 1.15;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero h1 em {
+            font-style: italic;
+            background: linear-gradient(135deg, var(--lavender-deep), var(--mint-deep));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-medium);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.8;
+            font-weight: 300;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2.2rem;
+            border-radius: 50px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--lavender), var(--lavender-deep));
+            color: var(--white);
+            box-shadow: 0 4px 20px rgba(155, 142, 196, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(155, 142, 196, 0.45);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.5);
+            color: var(--text-dark);
+            border: 1.5px solid rgba(195, 177, 225, 0.4);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.8);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .hero-scroll {
+            position: absolute;
+            bottom: 2.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-light);
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            animation: scrollBounce 2s ease-in-out infinite;
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--text-light), transparent);
+            animation: scrollLine 2s ease-in-out infinite;
+        }
+
+        @keyframes scrollBounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(8px); }
+        }
+
+        @keyframes scrollLine {
+            0% { opacity: 0; transform: scaleY(0); transform-origin: top; }
+            50% { opacity: 1; transform: scaleY(1); transform-origin: top; }
+            100% { opacity: 0; transform: scaleY(0); transform-origin: bottom; }
+        }
+
+        /* ===== SECTION STYLES ===== */
+        section {
+            padding: 7rem 2rem;
+            position: relative;
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--lavender-deep);
+            margin-bottom: 1rem;
+        }
+
+        .section-label::before,
+        .section-label::after {
+            content: '';
+            width: 30px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--lavender));
+        }
+
+        .section-label::after {
+            background: linear-gradient(90deg, var(--lavender), transparent);
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 400;
+            color: var(--text-dark);
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.05rem;
+            color: var(--text-light);
+            max-width: 550px;
+            margin: 0 auto;
+            font-weight: 300;
+            line-height: 1.7;
+        }
+
+        /* ===== ABOUT SECTION ===== */
+        .about {
+            background: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: -100px;
+            width: 400px;
+            height: 400px;
+            background: var(--lavender-light);
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.5;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+        }
+
+        .about-image-wrapper {
+            position: relative;
+        }
+
+        .about-image {
+            width: 100%;
+            aspect-ratio: 4/5;
+            border-radius: 200px 200px 100px 100px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .about-image-bg {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--lavender-light) 0%, var(--mint-light) 50%, var(--blush-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .about-image-icon {
+            width: 120px;
+            height: 120px;
+            opacity: 0.3;
+        }
+
+        .about-image-accent {
+            position: absolute;
+            bottom: -20px;
+            right: -20px;
+            width: 150px;
+            height: 150px;
+            background: var(--mint-light);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .about-floating-card {
+            position: absolute;
+            bottom: 30px;
+            left: -30px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px);
+            padding: 1.2rem 1.8rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-soft);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .floating-card-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--mint), var(--mint-deep));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .floating-card-icon svg {
+            width: 24px;
+            height: 24px;
+            stroke: white;
+        }
+
+        .floating-card-text h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .floating-card-text p {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .about-content h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 3.5vw, 2.8rem);
+            font-weight: 400;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .about-content h2 em {
+            font-style: italic;
+            color: var(--lavender-deep);
+        }
+
+        .about-content > p {
+            color: var(--text-medium);
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+            line-height: 1.8;
+        }
+
+        .about-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+            margin-top: 2rem;
+        }
+
+        .about-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem 1rem;
+            background: var(--cream);
+            border-radius: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .about-feature:hover {
+            transform: translateX(5px);
+        }
+
+        .about-feature .icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .about-feature .icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .about-feature span {
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        /* ===== SERVICES SECTION ===== */
+        .services {
+            background: linear-gradient(180deg, var(--cream) 0%, var(--lavender-light) 50%, var(--cream) 100%);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(15px);
+            border-radius: 24px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            border-radius: 24px 24px 0 0;
+            transition: height 0.4s ease;
+        }
+
+        .service-card:nth-child(1)::before { background: linear-gradient(90deg, var(--lavender), var(--lavender-deep)); }
+        .service-card:nth-child(2)::before { background: linear-gradient(90deg, var(--mint), var(--mint-deep)); }
+        .service-card:nth-child(3)::before { background: linear-gradient(90deg, var(--blush), var(--blush-deep)); }
+        .service-card:nth-child(4)::before { background: linear-gradient(90deg, var(--sage), #8FB57A); }
+        .service-card:nth-child(5)::before { background: linear-gradient(90deg, var(--lavender), var(--blush)); }
+        .service-card:nth-child(6)::before { background: linear-gradient(90deg, var(--mint), var(--lavender)); }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-medium);
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .service-card:hover::before {
+            height: 5px;
+        }
+
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            transition: transform 0.4s ease;
+        }
+
+        .service-card:hover .service-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .service-icon svg {
+            width: 36px;
+            height: 36px;
+        }
+
+        .service-card:nth-child(1) .service-icon { background: linear-gradient(135deg, var(--lavender-light), var(--lavender)); }
+        .service-card:nth-child(2) .service-icon { background: linear-gradient(135deg, var(--mint-light), var(--mint)); }
+        .service-card:nth-child(3) .service-icon { background: linear-gradient(135deg, var(--blush-light), var(--blush)); }
+        .service-card:nth-child(4) .service-icon { background: linear-gradient(135deg, var(--sage-light), var(--sage)); }
+        .service-card:nth-child(5) .service-icon { background: linear-gradient(135deg, var(--blush-light), var(--lavender-light)); }
+        .service-card:nth-child(6) .service-icon { background: linear-gradient(135deg, var(--mint-light), var(--lavender-light)); }
+
+        .service-card h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 0.8rem;
+        }
+
+        .service-card p {
+            font-size: 0.92rem;
+            color: var(--text-light);
+            line-height: 1.7;
+            font-weight: 300;
+        }
+
+        .service-tag {
+            display: inline-block;
+            margin-top: 1.2rem;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .service-card:nth-child(1) .service-tag { background: var(--lavender-light); color: var(--lavender-deep); }
+        .service-card:nth-child(2) .service-tag { background: var(--mint-light); color: var(--mint-deep); }
+        .service-card:nth-child(3) .service-tag { background: var(--blush-light); color: var(--blush-deep); }
+        .service-card:nth-child(4) .service-tag { background: var(--sage-light); color: #6B9B52; }
+        .service-card:nth-child(5) .service-tag { background: var(--blush-light); color: var(--lavender-deep); }
+        .service-card:nth-child(6) .service-tag { background: var(--mint-light); color: var(--lavender-deep); }
+
+        /* ===== PHILOSOPHY SECTION ===== */
+        .philosophy {
+            background: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .philosophy::after {
+            content: '';
+            position: absolute;
+            bottom: -80px;
+            right: -80px;
+            width: 350px;
+            height: 350px;
+            background: var(--blush-light);
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+        }
+
+        .philosophy-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 3rem;
+            text-align: center;
+        }
+
+        .philosophy-item {
+            padding: 2rem;
+            position: relative;
+        }
+
+        .philosophy-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4rem;
+            font-weight: 300;
+            line-height: 1;
+            margin-bottom: 1rem;
+            opacity: 0.15;
+        }
+
+        .philosophy-item:nth-child(1) .philosophy-number { color: var(--lavender-deep); }
+        .philosophy-item:nth-child(2) .philosophy-number { color: var(--mint-deep); }
+        .philosophy-item:nth-child(3) .philosophy-number { color: var(--blush-deep); }
+
+        .philosophy-item h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 0.8rem;
+        }
+
+        .philosophy-item p {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            line-height: 1.7;
+            font-weight: 300;
+        }
+
+        /* ===== TEAM SECTION ===== */
+        .team {
+            background: linear-gradient(180deg, var(--cream) 0%, var(--mint-light) 50%, var(--cream) 100%);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+        }
+
+        .team-card {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .team-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-medium);
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        .team-avatar {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-avatar-bg {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            font-weight: 400;
+            color: var(--white);
+        }
+
+        .team-card:nth-child(1) .team-avatar-bg { background: linear-gradient(135deg, var(--lavender), var(--lavender-deep)); }
+        .team-card:nth-child(2) .team-avatar-bg { background: linear-gradient(135deg, var(--mint), var(--mint-deep)); }
+        .team-card:nth-child(3) .team-avatar-bg { background: linear-gradient(135deg, var(--blush), var(--blush-deep)); }
+
+        .team-avatar-ring {
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .team-card h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+        }
+
+        .team-role {
+            font-size: 0.85rem;
+            color: var(--lavender-deep);
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .team-card p {
+            font-size: 0.92rem;
+            color: var(--text-light);
+            line-height: 1.7;
+            font-weight: 300;
+        }
+
+        .team-socials {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 1.2rem;
+        }
+
+        .team-social {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--cream);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .team-social:hover {
+            background: var(--lavender-light);
+            transform: translateY(-2px);
+        }
+
+        .team-social svg {
+            width: 16px;
+            height: 16px;
+            stroke: var(--text-light);
+        }
+
+        /* ===== TESTIMONIALS ===== */
+        .testimonials {
+            background: var(--white);
+            position: relative;
+        }
+
+        .testimonials::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: var(--lavender-light);
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.3;
+        }
+
+        .testimonial-card {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+        }
+
+        .testimonial-quote {
+            font-size: 5rem;
+            line-height: 1;
+            color: var(--lavender-light);
+            font-family: 'Cormorant Garamond', serif;
+            margin-bottom: -1.5rem;
+        }
+
+        .testimonial-card blockquote {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 300;
+            font-style: italic;
+            color: var(--text-dark);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .testimonial-author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--lavender-light), var(--mint-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            color: var(--text-medium);
+        }
+
+        .testimonial-author-info h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .testimonial-author-info p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .testimonial-stars {
+            display: flex;
+            justify-content: center;
+            gap: 0.3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .testimonial-stars svg {
+            width: 20px;
+            height: 20px;
+            fill: #FFD700;
+        }
+
+        /* ===== CONTACT SECTION ===== */
+        .contact {
+            background: linear-gradient(180deg, var(--cream) 0%, var(--lavender-light) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 400px;
+            height: 400px;
+            background: var(--mint-light);
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .contact-info {
+            padding-right: 2rem;
+        }
+
+        .contact-info h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 3.5vw, 2.8rem);
+            font-weight: 400;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .contact-info h2 em {
+            font-style: italic;
+            color: var(--lavender-deep);
+        }
+
+        .contact-info > p {
+            color: var(--text-light);
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+            line-height: 1.7;
+        }
+
+        .contact-details {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .contact-detail {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.2rem;
+        }
+
+        .contact-detail-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .contact-detail:nth-child(1) .contact-detail-icon { background: var(--lavender-light); }
+        .contact-detail:nth-child(2) .contact-detail-icon { background: var(--mint-light); }
+        .contact-detail:nth-child(3) .contact-detail-icon { background: var(--blush-light); }
+        .contact-detail:nth-child(4) .contact-detail-icon { background: var(--sage-light); }
+
+        .contact-detail-icon svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .contact-detail h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.2rem;
+        }
+
+        .contact-detail p, .contact-detail a {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            line-height: 1.5;
+        }
+
+        .contact-detail a:hover {
+            color: var(--lavender-deep);
+        }
+
+        .contact-hours {
+            margin-top: 2.5rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .contact-hours h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 0.8rem;
+        }
+
+        .hours-grid {
+            display: grid;
+            gap: 0.4rem;
+        }
+
+        .hours-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.88rem;
+        }
+
+        .hours-row .day {
+            color: var(--text-medium);
+            font-weight: 500;
+        }
+
+        .hours-row .time {
+            color: var(--text-light);
+        }
+
+        /* Contact Form */
+        .contact-form-wrapper {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(15px);
+            border-radius: 24px;
+            padding: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .contact-form-wrapper h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-form-wrapper > p {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-medium);
+            margin-bottom: 0.4rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            border: 1.5px solid rgba(195, 177, 225, 0.2);
+            border-radius: 14px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            background: rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--lavender);
+            box-shadow: 0 0 0 4px rgba(195, 177, 225, 0.15);
+            background: var(--white);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: var(--text-light);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-submit {
+            width: 100%;
+            padding: 1.1rem;
+            background: linear-gradient(135deg, var(--lavender), var(--lavender-deep));
+            color: var(--white);
+            border: none;
+            border-radius: 14px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(155, 142, 196, 0.4);
+        }
+
+        .form-submit::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent, rgba(255,255,255,0.2));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .form-submit:hover::after {
+            opacity: 1;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--text-dark);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 4rem 2rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--lavender), var(--mint), var(--blush), var(--sage), var(--lavender));
+        }
+
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1.5fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand .logo-text {
+            color: var(--white);
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .footer-brand p {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .footer-social {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .footer-social:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .footer-social svg {
+            width: 18px;
+            height: 18px;
+            stroke: rgba(255, 255, 255, 0.6);
+        }
+
+        .footer-col h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--white);
+            margin-bottom: 1.2rem;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 0.6rem;
+        }
+
+        .footer-col ul li a {
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 300;
+            transition: color 0.3s ease;
+        }
+
+        .footer-col ul li a:hover {
+            color: var(--lavender);
+        }
+
+        .footer-newsletter p {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            font-weight: 300;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--white);
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .newsletter-form input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .newsletter-form input:focus {
+            border-color: var(--lavender);
+        }
+
+        .newsletter-form button {
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, var(--lavender), var(--lavender-deep));
+            border: none;
+            border-radius: 12px;
+            color: var(--white);
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .newsletter-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(155, 142, 196, 0.4);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-bottom p {
+            font-size: 0.85rem;
+            font-weight: 300;
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-bottom-links a {
+            color: rgba(255, 255, 255, 0.4);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-bottom-links a:hover {
+            color: var(--lavender);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .about-grid {
+                gap: 3rem;
+            }
+
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .team-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 75%;
+                max-width: 350px;
+                height: 100vh;
+                background: rgba(255, 248, 240, 0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                justify-content: center;
+                padding: 2rem;
+                gap: 1.8rem;
+                transition: right 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+                box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+
+            .about-image-wrapper {
+                max-width: 350px;
+                margin: 0 auto;
+            }
+
+            .about-floating-card {
+                left: 10px;
+                bottom: 10px;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+                margin: 0 auto;
+            }
+
+            .philosophy-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .team-grid {
+                grid-template-columns: 1fr;
+                max-width: 350px;
+                margin: 0 auto;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+
+            .contact-info {
+                padding-right: 0;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-form-wrapper {
+                padding: 2rem;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            section {
+                padding: 5rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 280px;
+                justify-content: center;
+            }
+
+            .about-features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <a href="#" class="logo">
+            <div class="logo-icon">
+                <svg viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="21" cy="21" r="20" stroke="#9B8EC4" stroke-width="1.5" fill="none"/>
+                    <path d="M21 8C21 8 14 15 14 22C14 26.4 17.1 30 21 30C24.9 30 28 26.4 28 22C28 15 21 8 21 8Z" fill="#C3B1E1" opacity="0.4"/>
+                    <path d="M21 12C21 12 17 17 17 22C17 24.8 18.8 27 21 27C23.2 27 25 24.8 25 22C25 17 21 12 21 12Z" fill="#9B8EC4" opacity="0.5"/>
+                    <circle cx="21" cy="22" r="3" fill="#9B8EC4"/>
+                </svg>
+            </div>
+            <span class="logo-text">Serenity <span>Holistic</span></span>
+        </a>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#about">About</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#philosophy">Philosophy</a></li>
+            <li><a href="#team">Our Team</a></li>
+            <li><a href="#testimonials">Testimonials</a></li>
+            <li><a href="#contact" class="nav-cta">Book Now</a></li>
+        </ul>
+
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-bg-shapes">
+            <div class="hero-shape"></div>
+            <div class="hero-shape"></div>
+            <div class="hero-shape"></div>
+            <div class="hero-shape"></div>
+        </div>
+
+        <div class="hero-content">
+            <div class="hero-badge float-up">
+                <span class="dot"></span>
+                Welcome to Serenity
+            </div>
+            <h1 class="float-up delay-1">Heal Your Body,<br><em>Nurture Your Soul</em></h1>
+            <p class="float-up delay-2">Experience holistic wellness in a tranquil sanctuary designed to restore balance, harmony, and inner peace. Your journey to wholeness begins here.</p>
+            <div class="hero-buttons float-up delay-3">
+                <a href="#contact" class="btn btn-primary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    Book a Session
+                </a>
+                <a href="#services" class="btn btn-secondary">
+                    Explore Services
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </a>
+            </div>
+        </div>
+
+        <div class="hero-scroll">
+            <span>Scroll</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="section-container">
+            <div class="about-grid">
+                <div class="about-image-wrapper float-up">
+                    <div class="about-image">
+                        <div class="about-image-bg">
+                            <svg class="about-image-icon" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="60" cy="60" r="55" stroke="#9B8EC4" stroke-width="1" opacity="0.5"/>
+                                <circle cx="60" cy="60" r="40" stroke="#9B8EC4" stroke-width="1" opacity="0.3"/>
+                                <circle cx="60" cy="60" r="25" stroke="#9B8EC4" stroke-width="1" opacity="0.2"/>
+                                <path d="M60 20C60 20 40 40 40 60C40 71 49 80 60 80C71 80 80 71 80 60C80 40 60 20 60 20Z" fill="#9B8EC4" opacity="0.3"/>
+                                <circle cx="60" cy="60" r="8" fill="#9B8EC4" opacity="0.5"/>
+                                <path d="M30 90C30 90 45 75 60 75C75 75 90 90 90 90" stroke="#A8E6CF" stroke-width="2" opacity="0.4" fill="none"/>
+                                <path d="M35 95C35 95 47 85 60 85C73 85 85 95 85 95" stroke="#A8E6CF" stroke-width="1.5" opacity="0.3" fill="none"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="about-image-accent"></div>
+                    <div class="about-floating-card">
+                        <div class="floating-card-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                        </div>
+                        <div class="floating-card-text">
+                            <h4>15+ Years</h4>
+                            <p>of Healing Experience</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-content">
+                    <div class="section-label float-up">
+                        About Us
+                    </div>
+                    <h2 class="float-up delay-1">A Sanctuary for <em>Whole-Person</em> Healing</h2>
+                    <p class="float-up delay-2">Serenity Holistic Therapy Centre is a peaceful retreat where ancient healing wisdom meets modern therapeutic practices. We believe that true wellness encompasses the mind, body, and spirit — and our integrated approach addresses all three.</p>
+                    <p class="float-up delay-2">Founded in 2009, our centre has been a beacon of hope for thousands seeking natural, compassionate healing. Every treatment is personalized to your unique needs, creating a deeply transformative experience.</p>
+
+                    <div class="about-features">
+                        <div class="about-feature float-up delay-3">
+                            <div class="icon" style="background: var(--lavender-light);">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="#9B8EC4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            </div>
+                            <span>Certified Practitioners</span>
+                        </div>
+                        <div class="about-feature float-up delay-3">
+                            <div class="icon" style="background: var(--mint-light);">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="#7BC8A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            </div>
+                            <span>Flexible Scheduling</span>
+                        </div>
+                        <div class="about-feature float-up delay-4">
+                            <div class="icon" style="background: var(--blush-light);">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="#FFA0B5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                            </div>
+                            <span>Personalized Care</span>
+                        </div>
+                        <div class="about-feature float-up delay-4">
+                            <div class="icon" style="background: var(--sage-light);">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="#8FB57A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                            </div>
+                            <span>Integrated Therapies</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label float-up">Our Services</div>
+                <h2 class="section-title float-up delay-1">Therapies for Every Dimension of Wellness</h2>
+                <p class="section-subtitle float-up delay-2">Discover our comprehensive range of holistic treatments, each designed to restore balance and promote natural healing from within.</p>
+            </div>
+
+            <div class="services-grid">
+                <div class="service-card float-up">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#9B8EC4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M8 12s1.5 3 4 3 4-3 4-3"/><circle cx="9" cy="10" r="1" fill="#9B8EC4"/><circle cx="15" cy="10" r="1" fill="#9B8EC4"/></svg>
+                    </div>
+                    <h3>Acupuncture</h3>
+                    <p>Traditional Chinese medicine technique that restores energy flow and relieves pain through precise needle placement along meridian pathways.</p>
+                    <span class="service-tag">Energy Balance</span>
+                </div>
+
+                <div class="service-card float-up delay-1">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#7BC8A4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+                    </div>
+                    <h3>Aromatherapy</h3>
+                    <p>Harness the healing power of essential oils to reduce stress, enhance mood, and support your body's natural healing processes.</p>
+                    <span class="service-tag">Stress Relief</span>
+                </div>
+
+                <div class="service-card float-up delay-2">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#FFA0B5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                    </div>
+                    <h3>Reiki Healing</h3>
+                    <p>Channel universal life energy to promote deep relaxation, emotional release, and accelerate your body's natural healing abilities.</p>
+                    <span class="service-tag">Energy Healing</span>
+                </div>
+
+                <div class="service-card float-up delay-3">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#8FB57A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 8v4l3 3"/></svg>
+                    </div>
+                    <h3>Meditation & Mindfulness</h3>
+                    <p>Guided meditation sessions to cultivate inner peace, reduce anxiety, and develop a lasting sense of calm and mental clarity.</p>
+                    <span class="service-tag">Mental Wellness</span>
+                </div>
+
+                <div class="service-card float-up delay-4">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#C3B1E1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                    </div>
+                    <h3>Herbal Medicine</h3>
+                    <p>Customized herbal formulations based on ancient wisdom traditions, tailored to support your specific health goals and conditions.</p>
+                    <span class="service-tag">Natural Remedies</span>
+                </div>
+
+                <div class="service-card float-up delay-5">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#A8E6CF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                    </div>
+                    <h3>Nutritional Therapy</h3>
+                    <p>Personalized nutrition plans and guidance to nourish your body from within, supporting optimal health and vitality every day.</p>
+                    <span class="service-tag">Holistic Nutrition</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Philosophy Section -->
+    <section class="philosophy" id="philosophy">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label float-up">Our Philosophy</div>
+                <h2 class="section-title float-up delay-1">Three Pillars of Holistic Healing</h2>
+                <p class="section-subtitle float-up delay-2">Our approach is built on the understanding that true wellness comes from harmony between mind, body, and spirit.</p>
+            </div>
+
+            <div class="philosophy-content">
+                <div class="philosophy-item float-up">
+                    <div class="philosophy-number">01</div>
+                    <h3>Mind</h3>
+                    <p>We nurture mental clarity and emotional balance through mindfulness practices, meditation, and therapeutic counseling that addresses the root causes of stress and anxiety.</p>
+                </div>
+                <div class="philosophy-item float-up delay-2">
+                    <div class="philosophy-number">02</div>
+                    <h3>Body</h3>
+                    <p>Our physical therapies work with your body's innate healing intelligence, using gentle techniques to release tension, restore mobility, and promote cellular regeneration.</p>
+                </div>
+                <div class="philosophy-item float-up delay-4">
+                    <div class="philosophy-number">03</div>
+                    <h3>Spirit</h3>
+                    <p>We honor the spiritual dimension of healing, creating sacred space for deep inner work, energy clearing, and connection to your highest self and life purpose.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team" id="team">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label float-up">Who We Are</div>
+                <h2 class="section-title float-up delay-1">Meet Our Healing Practitioners</h2>
+                <p class="section-subtitle float-up delay-2">Our team of certified holistic therapists brings decades of combined experience and a shared passion for whole-person wellness.</p>
+            </div>
+
+            <div class="team-grid">
+                <div class="team-card float-up">
+                    <div class="team-avatar">
+                        <div class="team-avatar-bg">EL</div>
+                        <div class="team-avatar-ring"></div>
+                    </div>
+                    <h3>Dr. Elena Laurent</h3>
+                    <p class="team-role">Founder & Lead Practitioner</p>
+                    <p>With over 15 years of experience in integrative medicine, Dr. Laurent combines Eastern and Western healing modalities to create truly transformative treatment plans.</p>
+                    <div class="team-socials">
+                        <div class="team-social">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                        </div>
+                        <div class="team-social">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-card float-up delay-2">
+                    <div class="team-avatar">
+                        <div class="team-avatar-bg">SK</div>
+                        <div class="team-avatar-ring"></div>
+                    </div>
+                    <h3>Dr. Sarah Kim</h3>
+                    <p class="team-role">Acupuncturist & Herbalist</p>
+                    <p>Dr. Kim trained in Beijing and Vancouver, bringing a unique blend of traditional Chinese medicine and modern research to her practice. Specializes in pain management.</p>
+                    <div class="team-socials">
+                        <div class="team-social">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                        </div>
+                        <div class="team-social">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-card float-up delay-4">
+                    <div class="team-avatar">
+                        <div class="team-avatar-bg">MR</div>
+                        <div class="team-avatar-ring"></div>
+                    </div>
+                    <h3>Marcus Rivera</h3>
+                    <p class="team-role">Reiki Master & Energy Healer</p>
+                    <p>Marcus is a Usui Reiki Master with a gift for intuitive energy work. His sessions are known for creating profound shifts in emotional and spiritual wellbeing.</p>
+                    <div class="team-socials">
+                        <div class="team-social">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                        </div>
+                        <div class="team-social">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="testimonials">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label float-up">Testimonials</div>
+                <h2 class="section-title float-up delay-1">Words from Our Community</h2>
+            </div>
+
+            <div class="testimonial-card float-up delay-2">
+                <div class="testimonial-quote">"</div>
+                <div class="testimonial-stars">
+                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                </div>
+                <blockquote>Serenity has completely transformed my relationship with wellness. The combination of acupuncture and meditation has helped me manage chronic pain in ways conventional medicine never could. I feel like a new person.</blockquote>
+                <div class="testimonial-author">
+                    <div class="testimonial-author-avatar">JM</div>
+                    <div class="testimonial-author-info">
+                        <h4>Jennifer Morrison</h4>
+                        <p>Client for 3 years</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="section-container">
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <div class="section-label float-up" style="justify-content: flex-start;">Contact Us</div>
+                    <h2 class="float-up delay-1">Begin Your <em>Healing Journey</em> Today</h2>
+                    <p class="float-up delay-2">We'd love to hear from you. Whether you have questions about our services, want to book a consultation, or simply want to learn more about holistic wellness — reach out anytime.</p>
+
+                    <div class="contact-details">
+                        <div class="contact-detail float-up delay-3">
+                            <div class="contact-detail-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="#9B8EC4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            </div>
+                            <div>
+                                <h4>Visit Us</h4>
+                                <p>42 Tranquil Garden Lane<br>Mindful Valley, CA 90210</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-detail float-up delay-3">
+                            <div class="contact-detail-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="#7BC8A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            </div>
+                            <div>
+                                <h4>Call Us</h4>
+                                <a href="tel:+13105550142">(310) 555-0142</a>
+                            </div>
+                        </div>
+
+                        <div class="contact-detail float-up delay-4">
+                            <div class="contact-detail-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="#FFA0B5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                            </div>
+                            <div>
+                                <h4>Email Us</h4>
+                                <a href="mailto:hello@serenityholistic.com">hello@serenityholistic.com</a>
+                            </div>
+                        </div>
+
+                        <div class="contact-detail float-up delay-4">
+                            <div class="contact-detail-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="#8FB57A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            </div>
+                            <div>
+                                <h4>Find Us</h4>
+                                <p>Nestled in the serene hills of Mindful Valley, surrounded by nature</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="contact-hours float-up delay-5">
+                        <h4> Opening Hours</h4>
+                        <div class="hours-grid">
+                            <div class="hours-row">
+                                <span class="day">Monday – Friday</span>
+                                <span class="time">8:00 AM – 7:00 PM</span>
+                            </div>
+                            <div class="hours-row">
+                                <span class="day">Saturday</span>
+                                <span class="time">9:00 AM – 5:00 PM</span>
+                            </div>
+                            <div class="hours-row">
+                                <span class="day">Sunday</span>
+                                <span class="time">10:00 AM – 3:00 PM</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-form-wrapper float-up delay-2">
+                    <h3>Send Us a Message</h3>
+                    <p>Fill out the form below and we'll get back to you within 24 hours.</p>
+
+                    <form id="contactForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First Name</label>
+                                <input type="text" id="firstName" placeholder="Your first name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name</label>
+                                <input type="text" id="lastName" placeholder="Your last name" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" placeholder="your@email.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone</label>
+                                <input type="tel" id="phone" placeholder="(310) 555-0000">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="service">Interested Service</label>
+                            <select id="service">
+                                <option value="">Select a service...</option>
+                                <option value="acupuncture">Acupuncture</option>
+                                <option value="aromatherapy">Aromatherapy</option>
+                                <option value="reiki">Reiki Healing</option>
+                                <option value="meditation">Meditation & Mindfulness</option>
+                                <option value="herbal">Herbal Medicine</option>
+                                <option value="nutrition">Nutritional Therapy</option>
+                                <option value="consultation">General Consultation</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Your Message</label>
+                            <textarea id="message" placeholder="Tell us about your wellness goals or any questions you have..." rows="4"></textarea>
+                        </div>
+
+                        <button type="submit" class="form-submit">
+                            Send Message ✨
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <span class="logo-text" style="font-family: 'Cormorant Garamond', serif;">Serenity <span style="color: var(--lavender);">Holistic</span></span>
+                <p>A sanctuary for whole-person healing, where ancient wisdom meets modern care. Your journey to balance, harmony, and inner peace starts here.</p>
+                <div class="footer-socials">
+                    <div class="footer-social">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                    </div>
+                    <div class="footer-social">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                    </div>
+                    <div class="footer-social">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#services">Our Services</a></li>
+                    <li><a href="#team">Our Team</a></li>
+                    <li><a href="#testimonials">Testimonials</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Services</h4>
+                <ul>
+                    <li><a href="#">Acupuncture</a></li>
+                    <li><a href="#">Aromatherapy</a></li>
+                    <li><a href="#">Reiki Healing</a></li>
+                    <li><a href="#">Meditation</a></li>
+                    <li><a href="#">Herbal Medicine</a></li>
+                    <li><a href="#">Nutritional Therapy</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col footer-newsletter">
+                <h4>Stay Connected</h4>
+                <p>Subscribe to our newsletter for wellness tips, special offers, and community updates.</p>
+                <div class="newsletter-form">
+                    <input type="email" placeholder="Your email address">
+                    <button>Subscribe</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2024 Serenity Holistic Therapy Centre. All rights reserved.</p>
+            <div class="footer-bottom-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Accessibility</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ===== SCROLL FLOAT ANIMATION =====
+        const floatElements = document.querySelectorAll('.float-up');
+
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        floatElements.forEach(el => observer.observe(el));
+
+        // ===== NAVBAR SCROLL EFFECT =====
+        const navbar = document.getElementById('navbar');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 80) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // ===== MOBILE MENU =====
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu on link click
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // ===== SMOOTH SCROLL FOR ANCHOR LINKS =====
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offset = 80;
+                    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // ===== FORM SUBMISSION =====
+        const contactForm = document.getElementById('contactForm');
+
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const submitBtn = this.querySelector('.form-submit');
+            const originalText = submitBtn.textContent;
+
+            submitBtn.textContent = 'Sending...';
+            submitBtn.style.opacity = '0.7';
+
+            setTimeout(() => {
+                submitBtn.textContent = 'Message Sent! ✓';
+                submitBtn.style.opacity = '1';
+                submitBtn.style.background = 'linear-gradient(135deg, #A8E6CF, #7BC8A4)';
+
+                setTimeout(() => {
+                    submitBtn.textContent = originalText;
+                    submitBtn.style.background = 'linear-gradient(135deg, var(--lavender), var(--lavender-deep))';
+                    contactForm.reset();
+                }, 3000);
+            }, 1500);
+        });
+
+        // ===== PARALLAX EFFECT ON HERO SHAPES =====
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const shapes = document.querySelectorAll('.hero-shape');
+
+            shapes.forEach((shape, index) => {
+                const speed = 0.1 + (index * 0.05);
+                shape.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+    </script>
+</body>
+</html>
